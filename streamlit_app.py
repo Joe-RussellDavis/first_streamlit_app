@@ -1,5 +1,6 @@
 import streamlit as sl
 import pandas as pd
+import requests
 
 sl.title('My Parents New Healthy Diner')
 
@@ -7,7 +8,7 @@ sl.header('Breakfast Favourites')
 
 sl.text('🥣 Omega 3 & Blueberry Oatmeal')
 
-sl.text(' 🥗 Kale, Spnach & Rocket Smoothie')
+sl.text(' 🥗 Kale, Spinach & Rocket Smoothie')
 
 sl.text('🐔 Hard-Boiled Free-Range Egg')
 
@@ -27,3 +28,20 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 
 sl.dataframe(fruits_to_show)
 
+#Now for fruityvice api response
+
+
+
+sl.header("Fruityvice Fruit Advice!")
+
+fruit_choice = sl.text_input('What fruit would you like information about?', 'all')
+sl.write('The user entered ', fruit_choice)
+
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+
+
+
+# normalises the json format to stage it for a dataframe
+fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+# dataframe
+sl.dataframe(fruityvice_normalized)
