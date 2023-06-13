@@ -54,3 +54,7 @@ my_cur.execute("SELECT * from fruit_load_list")
 my_data_row = my_cur.fetchall()
 sl.header("the fruit load list contains:")
 sl.dataframe(my_data_row)
+
+fruit_choice = sl.text_input('What fruit would you like to add?')
+my_cur.execute(f'INSERT INTO FRUIT_LOAD_LIST VALUES {fruit_choice}')
+
