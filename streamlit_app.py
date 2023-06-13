@@ -57,4 +57,5 @@ sl.dataframe(my_data_row)
 
 fruit_choice = sl.text_input('What fruit would you like to add?')
 my_cur.execute(f'INSERT INTO FRUIT_LOAD_LIST VALUES {fruit_choice}')
+sl.text(f'thank you for adding {fruit_choice}')
 
