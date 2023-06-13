@@ -61,6 +61,6 @@ fruit_choice = sl.text_input('What fruit would you like to add?', placeholder=No
 if fruit_choice is None:
     pass
 else:
-    my_new_cur.execute(f'INSERT INTO FRUIT_LOAD_LIST VALUES {"{fruit_choice}"}')
+    my_new_cur.execute(f'INSERT INTO FRUIT_LOAD_LIST (FRUIT_NAME) VALUES ({fruit_choice})')
     sl.text(f'thank you for adding {fruit_choice}')
 
