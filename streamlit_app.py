@@ -55,11 +55,12 @@ my_data_row = my_cur.fetchall()
 sl.header("the fruit load list contains:")
 sl.dataframe(my_data_row)
 
+my_new_cur = my_cnx.cursor()
 fruit_choice = sl.text_input('What fruit would you like to add?', placeholder=None)
 
 if fruit_choice is None:
     pass
 else:
-    my_cur.execute(f'INSERT INTO FRUIT_LOAD_LIST VALUES {{fruit_choice}}')
+    my_new_cur.execute(f'INSERT INTO FRUIT_LOAD_LIST VALUES {"{fruit_choice}"}')
     sl.text(f'thank you for adding {fruit_choice}')
 
