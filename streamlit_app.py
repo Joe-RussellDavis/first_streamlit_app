@@ -65,8 +65,8 @@ def get_fruit_load_list():
     
 
 #Add a button to load the fruit
-
-if sl.button('Get Fruit Load List'):
+sl.header('View Our Fruit List - Add Your Favourites!')
+if sl.button('Get Fruit List'):
     my_cnx = snowflake.connector.connect(**sl.secrets["snowflake"])
     sl.dataframe(get_fruit_load_list())
     my_cnx.close()
