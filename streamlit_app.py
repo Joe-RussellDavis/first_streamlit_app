@@ -72,8 +72,6 @@ if sl.button('Get Fruit Load List'):
     sl.dataframe(get_fruit_load_list())
     
 
-my_new_cur = my_cnx.cursor()
-
 def insert_row_snowflake(new_fruit):
         
         ''' Function to insert row into table in snowflake'''
@@ -91,7 +89,7 @@ try:
     else:
         if sl.button('Add your Fruit to the list'):
             sl.text(insert_row_snowflake(fruit_to_add))
-            my_new_cur.close()
+            my_cnx.close()
 
 except URLError as e:
     sl.error()
