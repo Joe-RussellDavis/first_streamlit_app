@@ -77,6 +77,6 @@ try:
 except URLError as e:
     sl.error()
 
-my_cur.execute("insert into fruit_load_list_values ('from streamlit')")
+my_cur.execute("insert into fruit_load_list values ('from streamlit')")
 
 
