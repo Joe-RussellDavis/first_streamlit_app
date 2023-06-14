@@ -59,7 +59,6 @@ except URLError as e:
 def get_fruit_load_list():
      
     ''' Function to retrieve fruit_load_list table from snowflake'''
-    my_cnx = snowflake.connector.connect(**sl.secrets["snowflake"])
     with my_cnx.cursor() as my_cur:
         my_cur.execute("Select * from fruit_load_list")
         return my_cur.fetchall()
@@ -70,6 +69,7 @@ def get_fruit_load_list():
 if sl.button('Get Fruit Load List'):
     my_cnx = snowflake.connector.connect(**sl.secrets["snowflake"])
     sl.dataframe(get_fruit_load_list())
+    my_cnx.close()
     
 
 def insert_row_snowflake(new_fruit):
@@ -88,6 +88,7 @@ try:
         sl.error('Please select a fruit to add to the list')
     else:
         if sl.button('Add your Fruit to the list'):
+            my_cnx = snowflake.connector.connect(**sl.secrets["snowflake"])
             sl.text(insert_row_snowflake(fruit_to_add))
             my_cnx.close()
 
