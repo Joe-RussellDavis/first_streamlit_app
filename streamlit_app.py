@@ -58,12 +58,12 @@ except URLError as e:
 
 def get_fruit_load_list():
      
-     ''' Function to retrieve fruit_load_list table from snowflake'''
-
-     with my_cnx.cursor() as my_cur:
-          my_cur.execute("Select * from fruit_load_list")
-          return my_cur.fetchall()
-     
+    ''' Function to retrieve fruit_load_list table from snowflake'''
+    my_cnx = snowflake.connector.connect(**sl.secrets["snowflake"])
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute("Select * from fruit_load_list")
+        return my_cur.fetchall()
+    
 
 #Add a button to load the fruit
 
