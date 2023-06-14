@@ -2,6 +2,7 @@ import streamlit as sl
 import pandas as pd
 import requests
 import snowflake.connector
+from urllib.error import URLError
 
 
 sl.title('My Parents New Healthy Diner')
@@ -56,11 +57,23 @@ sl.header("the fruit load list contains:")
 sl.dataframe(my_data_row)
 
 my_new_cur = my_cnx.cursor()
-fruit_choice = sl.text_input('What fruit would you like to add?', placeholder=None)
 
-if fruit_choice is None:
-    pass
-else:
-    my_new_cur.execute(f'INSERT INTO FRUIT_LOAD_LIST (FRUIT_NAME) VALUES ({fruit_choice})')
-    sl.text(f'thank you for adding {fruit_choice}')
+def insert_row_snowflake(new_fruit):
+        my_new_cur.execute(f"insert into pc_rivery_db.public.fruit_load_list values ('{new_fruit}')")
+        return "Thanks for adding " + new_fruit
+        
+
+
+fruit_to_add = sl.text_input('What fruit would you like to add?')
+
+try:
+    if not fruit_to_add:
+        sl.error('Please select a fruit to add to the list')
+    else:
+        if sl.button('Add your Fruit to the list'):
+            sl.text(insert_row_snowflake(fruit_to_add))
+            my_new_cur.close()
+
+except URLError as e:
+    sl.error()
 
