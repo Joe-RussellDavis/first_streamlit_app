@@ -33,34 +33,53 @@ sl.dataframe(fruits_to_show)
 
 #Now for fruityvice api response
 
+def get_fruityvice_data(this_fruit_choice):
 
+    '''Function for communicating with fruity_vice API'''
+
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
+    # normalises the json format to stage it for a dataframe
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    return fruityvice_normalized
+     
 
 sl.header("Fruityvice Fruit Advice!")
+try:
+    fruit_choice = sl.text_input('What fruit would you like information about?')
+    if not fruit_choice:
+            sl.error("Please select a fruit to get information")
+    else:
+            sl.dataframe(get_fruityvice_data(fruit_choice))
+except URLError as e:
+     sl.error()
 
-fruit_choice = sl.text_input('What fruit would you like information about?', 'all')
-sl.write('The user entered ', fruit_choice)
 
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+#Snowflake related functions
 
+def get_fruit_load_list():
+     
+     ''' Function to retrieve fruit_load_list table from snowflake'''
 
+     with my_cnx.cursor() as my_cur:
+          my_cur.execute("Select * from fruit_load_list")
+          return my_cur.fetchall()
+     
 
-# normalises the json format to stage it for a dataframe
-fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
-# dataframe
-sl.dataframe(fruityvice_normalized)
+#Add a button to load the fruit
 
-my_cnx = snowflake.connector.connect(**sl.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("SELECT * from fruit_load_list")
-my_data_row = my_cur.fetchall()
-sl.header("the fruit load list contains:")
-sl.dataframe(my_data_row)
+if sl.button('Get Fruit Load List'):
+    my_cnx = snowflake.connector.connect(**sl.secrets["snowflake"])
+    sl.dataframe(get_fruit_load_list())
+    
 
 my_new_cur = my_cnx.cursor()
 
 def insert_row_snowflake(new_fruit):
-        my_new_cur.execute(f"insert into pc_rivery_db.public.fruit_load_list values ('{new_fruit}')")
-        return "Thanks for adding " + new_fruit
+        
+        ''' Function to insert row into table in snowflake'''
+        with my_cnx.cursor() as my_cur:
+            my_cur.execute(f"insert into pc_rivery_db.public.fruit_load_list values ('{new_fruit} (From Streamlit)')")
+            return "Thanks for adding " + new_fruit
         
 
 
@@ -77,6 +96,6 @@ try:
 except URLError as e:
     sl.error()
 
-my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+
 
 
